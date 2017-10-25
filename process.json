@@ -2,7 +2,7 @@
     "apps" : [{
       "name": "video-grabber",
       "script": "./bin/www.js",
-      "watch": true,
+      "watch": false,
       "instances": 1,
       "exec_mode": "cluster"
     }]

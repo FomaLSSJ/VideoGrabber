@@ -6,6 +6,10 @@ const moment = require('moment');
 
 const destination = path.join(__dirname, '../../files');
 
+if (!fs.existsSync(destination)) {
+    fs.mkdirSync(destination);
+}
+
 module.exports = {
     download: (opts) => {
         let filePath = `${ destination }/${ opts.title || moment().format('DDMMYYYY_HHmmss') }.${ opts.format }`;

@@ -9,9 +9,13 @@ module.exports = {
 				let name = url.split('/');
 
 				let line = data.match(/(file)(.*)(\/cdn)(.*)(\'\,)/g);
-				let elements = line[0].split('\'');
+				let linem = data.match(/(")(https?:\/\/cdn)(.*)(")( )/g);
 
-				return { title: name.pop(), url: elements[1], platform: 'EroProfile', format: 'm4v' };
+				let elements = line
+					? line[0].split('\'')
+					: linem[0].split('"');
+
+				return { title: name.pop(), url: elements[1].replace(/&amp;/g, '&'), platform: 'EroProfile', format: 'm4v' };
 			})
 			.catch(err => console.error(err));
 	}

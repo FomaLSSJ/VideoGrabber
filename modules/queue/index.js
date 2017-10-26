@@ -16,10 +16,7 @@ module.exports = {
 };
 
 queue.process('download', (job, done) => {
-    return downloader.download(job.data)
-        .then(data => {
-            console.log(data);
-            return done();
-        })
+    return downloader.download(job)
+        .then(data => done())
         .catch(err => done(err));
 });

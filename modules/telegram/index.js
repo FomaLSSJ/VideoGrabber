@@ -4,6 +4,7 @@ const TeleBot = require('telebot'),
     bot = new TeleBot({ token: process.env.TELEGRAM_TOKEN });
 
 const API = 'https://thecatapi.com/api/images/get?format=src&type=';
+const PLAFORMS = getPlatforms();
 
 const replyMarkup = bot.keyboard([
     ['/kitty', '/kittygif']
@@ -51,15 +52,20 @@ bot.on(['/kitty', '/kittygif'], msg => {
     });
 });
 
-bot.on('/xvideos', msg => {
-    let url = msg.text.split(' ').pop();
+bot.on(PLAFORMS, msg => {
+    let [cmd, url] = msg.text.split(' ');
+
+    if (!PLAFORMS.includes(cmd)) {
+        console.log('Error platform');
+        return bot.sendMessage(msg.chat.id, 'Sorry, I can not download this video');
+    }
 
     if (!url.match(/(https?):\/\/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) {
         console.log('Error regexp');
         return bot.sendMessage(msg.chat.id, 'Sorry, I can not download this video');
     }
 
-    return platforms.xvideos.getDetails(url)
+    return platforms[cmd.replace('/','')].getDetails(url)
         .then(details => queue.create(details))
         .then(result => bot.sendMessage(msg.chat.id, 'Yup, I add download in queue!'))
         .catch(err => {
@@ -68,21 +74,16 @@ bot.on('/xvideos', msg => {
         });
 });
 
-bot.on('/eroprofile', msg => {
-    let url = msg.text.split(' ').pop();
-
-    if (!url.match(/(https?):\/\/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) {
-        return bot.sendMessage(msg.chat.id, 'Sorry, I can not download this video');
-    }
-
-    return platforms.eroprofile.getDetails(url)
-        .then(details => queue.create(details))
-        .then(result => bot.sendMessage(msg.chat.id, 'Yup, I add download in queue!'))
-        .catch(err => bot.sendMessage(msg.chat.id, 'Sorry, I can not download this video'));
-});
-
 module.exports = {
     init: () => {
         return bot.start();
     }
 };
+
+function getPlatforms() {
+    let result = [];
+    for (p in platforms) {
+        result.push(`/${ p }`);
+    }
+    return result;
+}

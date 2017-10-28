@@ -5,6 +5,7 @@ const TeleBot = require('telebot'),
 
 const API = 'https://thecatapi.com/api/images/get?format=src&type=';
 const PLAFORMS = getPlatforms();
+const RUSPIGLETS_FILE_ID = 'CAADAgADQgADceJtEHLy6ECgr8gFAg';
 
 const replyMarkup = bot.keyboard([
     ['/kitty', '/kittygif']
@@ -12,6 +13,10 @@ const replyMarkup = bot.keyboard([
 
 bot.on('text', msg => {
     console.log(`[text] ${ msg.chat.id } ${ msg.text }`);
+
+    if (['/ruspiglets', '/ruspijets', '/piglets', '/pijets'].includes(msg.text.toLowerCase())) {
+        return bot.sendSticker(msg.chat.id, RUSPIGLETS_FILE_ID);
+    }
 });
 
 bot.on(['/start', '/help'], msg => {

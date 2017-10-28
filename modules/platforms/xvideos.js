@@ -1,3 +1,4 @@
+const utils = require('../utils');
 const rp = require('request-promise');
 
 module.exports = {
@@ -6,12 +7,12 @@ module.exports = {
 
 		return rp(opts)
 			.then(data => {
-				let name = url.split('/');
+				let name = utils.getNameFromUrl(url);
 
 				let line = data.match(/(html5player.setVideoUrlHigh)..(.*).../g);
 				let elements = line[0].split('\'');
 
-				return { title: name.pop(), url: elements[1], platform: 'XVIDEOS', format: 'mp4' };
+				return { title: name, url: elements[1], platform: 'XVIDEOS', format: 'mp4' };
 			})
 			.catch(err => console.error(err));
 	}

@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+global._ = require('lodash');
+
 const app = require('../app'),
     telebot = require('../modules/telegram'),
     port = (process.env.NODE_PORT || 3000);

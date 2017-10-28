@@ -3,34 +3,21 @@ const path = require('path');
 
 const PATH = path.join(__dirname, '../../files');
 
+let template = fs.readFileSync(path.join(__dirname, 'templates/files.html'), 'utf8');
 let index = fs.createWriteStream(path.join(PATH, 'index.html'));
 
 module.exports = {
     generate: () => {
         return new Promise((resolve, reject) => {
-            let dir = fs.readdirSync(PATH);
-
-            writeHeader();
-            writeContent(dir);
-            writeFooter();
-
-            index.end();
-
-            return resolve(true);
+            try {
+                let videos = fs.readdirSync(PATH);
+                _.remove(videos, x => x === 'index.html')
+                index.write(_.template(template)({ title: 'Video Files', videos: videos }));
+                index.end();
+                return resolve(true);
+            } catch (err) {
+                return reject(err);
+            }
         });
     }
 };
-
-function writeHeader() {
-    index.write('<html><head><title>Files</title></head><body>');
-}
-
-function writeContent(files) {
-    files.forEach((x, i) => {
-        index.write(`<a href="/files/${ x }">${ i + 1 } - ${ x }</a></br>`);
-    });
-}
-
-function writeFooter() {
-    index.write('</body></html>');
-}

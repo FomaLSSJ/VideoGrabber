@@ -80,6 +80,11 @@ bot.on(PLAFORMS, msg => {
         return bot.sendMessage(msg.chat.id, 'Sorry, I can not download this video');
     }
 
+    if (_.isEmpty(url)) {
+        console.log('[error] url not given');
+        return bot.sendMessage(msg.chat.id, 'Sorry, I can not download w/o url');
+    }
+
     if (!url.match(/(https?):\/\/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) {
         console.log(`[error] regexp ${ url }`);
         return bot.sendMessage(msg.chat.id, 'Sorry, I can not download this video');

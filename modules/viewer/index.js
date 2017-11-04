@@ -14,7 +14,7 @@ module.exports = {
                 let render = _.template(template)({ title: 'Video Files', videos: videos });
                 let file = fs.createWriteStream(path.join(PATH, 'index.html'));
                 file.write(render);
-                index.end();
+                file.end();
                 return resolve(render);
             } catch (err) {
                 console.log(`[error] viewer ${ err }`);

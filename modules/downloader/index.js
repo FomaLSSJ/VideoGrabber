@@ -34,9 +34,7 @@ module.exports = {
                 })
                 .on('end', () => {
                     file.close();
-                    return viewer.generate()
-                        .then(res => resolve(true))
-                        .catch(err => resolve(err));
+                    return resolve(true);
                 })
                 .pipe(file);
         });

@@ -1,15 +1,12 @@
 const TeleBot = require('telebot'),
     platforms = require('../platforms'),
     queue = require('../queue'),
+    utils = require('../utils'),
     bot = new TeleBot({ token: process.env.TELEGRAM_TOKEN });
 
 const API = 'https://thecatapi.com/api/images/get?format=src&type=';
 const PLAFORMS = getPlatforms();
 const RUSPIGLETS_FILE_ID = 'CAADAgADQgADceJtEHLy6ECgr8gFAg';
-
-const replyMarkup = bot.keyboard([
-    ['/kitty', '/kittygif']
-], {resize: true, once: false});
 
 bot.on('text', msg => {
     console.log(`[text] ${ msg.chat.id } ${ msg.text }`);
@@ -20,8 +17,24 @@ bot.on('text', msg => {
 });
 
 bot.on(['/start', '/help'], msg => {
+    const replyMarkup  = bot.keyboard([
+        ['/kitty', '/kittygif']
+    ], { resize: true });
+
     return bot.sendMessage(msg.chat.id,
-        '😺 Use commands: /kitty, /kittygif and /about', {replyMarkup}
+        '😺 Use commands: /kitty, /kittygif and /about', { replyMarkup }
+    );
+});
+
+bot.on('/debug', msg => {
+    allowId(msg);
+
+    const replyMarkup = bot.keyboard([
+        ['/render', '/xvideos', '/eroprofile']
+    ], { resize: true });
+
+    return bot.sendMessage(msg.chat.id,
+        'Use debug commands', { replyMarkup }
     );
 });
 
@@ -58,15 +71,17 @@ bot.on(['/kitty', '/kittygif'], msg => {
 });
 
 bot.on(PLAFORMS, msg => {
+    allowId(msg);
+
     let [cmd, url] = msg.text.split(' ');
 
     if (!PLAFORMS.includes(cmd)) {
-        console.log('Error platform');
+        console.log(`[error] platform ${ cmd }`);
         return bot.sendMessage(msg.chat.id, 'Sorry, I can not download this video');
     }
 
     if (!url.match(/(https?):\/\/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) {
-        console.log('Error regexp');
+        console.log(`[error] regexp ${ url }`);
         return bot.sendMessage(msg.chat.id, 'Sorry, I can not download this video');
     }
 
@@ -77,6 +92,14 @@ bot.on(PLAFORMS, msg => {
             console.log(err);
             return bot.sendMessage(msg.chat.id, 'Sorry, I can not download this video')
         });
+});
+
+bot.on('/render', msg => {
+    allowId(msg);
+
+    return utils.renderVideoList()
+        .then(() => bot.sendMessage(msg.chat.id, 'Video list success rendered'))
+        .catch(() => bot.sendMessage(msg.chat.id, 'Hmm, videos list not rendered'));
 });
 
 module.exports = {
@@ -91,4 +114,13 @@ function getPlatforms() {
         result.push(`/${ p }`);
     }
     return result;
+}
+
+function allowId(msg) {
+    let { id } = msg.from;
+    
+    if (!utils.isAllowed(id)) {
+        console.log(`[debug] user ${ id } call debug method ${ cmd }`);
+        return bot.sendMessage(msg.chat.id, 'You not allow use debug methods');
+    }
 }

@@ -1,10 +1,10 @@
 {
-    "apps" : [{
-      "name": "video-grabber",
-      "script": "./bin/www.js",
-      "watch": false,
-      "instances": 1,
-      "exec_mode": "cluster"
-    }]
-  }
+  "apps" : [{
+    "name": "video-grabber",
+    "script": "./bin/www.js",
+    "watch": false,
+    "instances": 1,
+    "exec_mode": "cluster"
+  }]
+}
   

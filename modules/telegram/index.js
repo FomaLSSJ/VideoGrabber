@@ -30,7 +30,7 @@ bot.on('/debug', msg => {
     allowId(msg);
 
     const replyMarkup = bot.keyboard([
-        ['/render', '/xvideos', '/eroprofile']
+        ['/render', '/clean']
     ], { resize: true });
 
     return bot.sendMessage(msg.chat.id,
@@ -105,6 +105,12 @@ bot.on('/render', msg => {
     return utils.renderVideoList()
         .then(() => bot.sendMessage(msg.chat.id, 'Video list success rendered'))
         .catch(() => bot.sendMessage(msg.chat.id, 'Hmm, videos list not rendered'));
+});
+
+bot.on('/clean', msg => {
+    return utils.cleanFiles()
+        .then(() => bot.sendMessage(msg.chat.id, 'Clean files success'))
+        .catch(() => bot.sendMessage(msg.chat.id, 'Something wrong'));
 });
 
 module.exports = {

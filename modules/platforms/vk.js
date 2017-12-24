@@ -12,7 +12,7 @@ vk.authorize({
 .catch(err => console.log(`[error] vkapi ${ err }`));
 
 module.exports = {
-	getDetails: (url) => {
+	getDetails(url) {
         let videoId = url.split('/').pop().split('o').pop();
 
         return vk.call('video.get', { videos: videoId })

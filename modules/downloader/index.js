@@ -14,7 +14,7 @@ if (!fs.existsSync(destination)) {
 }
 
 module.exports = {
-    download: (job) => {
+    download(job) {
         let opts = job.data;
         let filePath = `${ destination }/${ opts.title || moment().format('DDMMYYYY_HHmmss') }.${ opts.format }`;
 

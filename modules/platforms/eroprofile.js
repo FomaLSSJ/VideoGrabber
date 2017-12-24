@@ -2,7 +2,7 @@ const utils = require('../utils');
 const rp = require('request-promise');
 
 module.exports = {
-	getDetails: (url) => {
+	getDetails(url) {
 		const opts = { method: 'GET', uri: url };
 
 		return rp(opts)

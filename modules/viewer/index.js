@@ -6,7 +6,7 @@ const PATH = path.join(__dirname, '../../files');
 let template = fs.readFileSync(path.join(__dirname, 'templates/files.html'), 'utf8');
 
 module.exports = {
-    generate: () => {
+    generate() {
         return new Promise((resolve, reject) => {
             try {
                 let videos = fs.readdirSync(PATH);

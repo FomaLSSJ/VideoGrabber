@@ -4,16 +4,17 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --recursive ./test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "dotenv": "^4.0.0",
     "kue": "^0.11.6",
     "lodash": "^4.17.4",
-    "moment": "^2.19.1",
+    "moment": "^2.20.1",
     "mongodb": "^2.2.31",
     "morgan": "^1.9.0",
     "node-vkapi": "^3.0.4",
@@ -21,5 +22,10 @@
     "request-progress": "^3.0.0",
     "request-promise": "^4.2.2",
     "telebot": "^1.2.3"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "mocha": "^5.0.1"
   }
 }
